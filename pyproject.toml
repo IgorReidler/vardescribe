@@ -8,12 +8,12 @@ build-backend = "setuptools.build_meta"
 name = "vardescribe"
 version = "0.1.0"
 authors = [
-  { name="Your Name", email="you@example.com" },
+  { name="Igor Reidler", email="igormail@gmail.com" },
 ]
-description = "A small utility to describe variables."
+description = "A simple Python utility to describe the structure, type, and stats of a variable - for sharing with LLMs and other people."
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -24,5 +24,5 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/vardescribe"
-Issues = "https://github.com/your-username/vardescribe/issues"
+Homepage = "https://github.com/IgorReidler/vardescribe"
+Issues = "https://github.com/IgorReidler/vardescribe/issues"
