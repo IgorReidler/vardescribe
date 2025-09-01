@@ -20,6 +20,9 @@ Tested on:
 
 ## Getting Started
 
+### Install
+```pip install vardescribe```
+
 ### Dependencies
 Required
 * numpy
@@ -28,11 +31,6 @@ Required
 Optional
 * Pandas: Required for describing DataFrame objects. If Pandas is not installed, vardescribe will function correctly for all other types.
 ```pip install pandas```
-
-### Installing
-
-install vardescribe directly from GitHub using pip:
-```pip install git+https://github.com/IgorReidler/vardescribe.git```
 
 ### Usage
 1. Import vardescribe: ```from vardescribe import vardescribe```
