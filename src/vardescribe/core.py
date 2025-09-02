@@ -1,17 +1,17 @@
 # src/vardescribe/core.py
 
-import subprocess
 import inspect
 import numpy as np
 
+
 def vardescribe(obj):
     #Written by Igor Reidler 2025
-    
+
     try:
         import pandas as pd
     except ImportError:
         pd = None
-
+    
     TAB = 8
 
     def _fmt(x):
@@ -32,7 +32,7 @@ def vardescribe(obj):
         # ---------- DataFrame ----------
         if pd is not None and isinstance(cur, pd.DataFrame):
             header = (
-                f"{indent}dataframe {name} with {len(cur)} rows, {cur.shape[1]} columns"
+                f"{indent}dataframe '{name}' with {len(cur)} rows, {cur.shape[1]} columns"
                 if top and name
                 else f"{indent}DataFrame rows({len(cur)})"
             )
@@ -55,7 +55,7 @@ def vardescribe(obj):
         # ---------- dict ----------
         if isinstance(cur, dict):
             header = (
-                f"{indent}dict {name} with {len(cur)} keys"
+                f"{indent}dict '{name}' with {len(cur)} keys"
                 if top and name
                 else f"{indent}dict with {len(cur)} keys"
             )
@@ -76,7 +76,12 @@ def vardescribe(obj):
                 if len(counts) == 1
                 else " [" + ", ".join(f"{t}:{c}" for t, c in counts.items()) + "]"
             )
-            out.append(f"{indent}list size({len(cur)}){info}")
+            header = (
+                f"{indent}list '{name}' size({len(cur)}){info}"
+                if top and name
+                else f"{indent}list size({len(cur)}){info}"
+            )
+            out.append(header)
             if cur:
                 out.extend(_lines(cur[0], lvl + 1))
             return out
@@ -91,33 +96,69 @@ def vardescribe(obj):
                 if len(counts) == 1
                 else " [" + ", ".join(f"{t}:{c}" for t, c in counts.items()) + "]"
             )
-            out.append(f"{indent}tuple size({len(cur)}){info}")
+            header = (
+                f"{indent}tuple {name} size({len(cur)}){info}"
+                if top and name
+                else f"{indent}tuple size({len(cur)}){info}"
+            )
+            out.append(header)
             if cur:
                 out.extend(_lines(cur[0], lvl + 1))
             return out
 
-        # ---------- ndarray or similar ----------
+# ---------- ndarray or similar ----------
         if hasattr(cur, "shape"):
+            # Handle scalar arrays (0-dimensional)
             if cur.shape == ():
-                desc = f"scalar {cur.dtype}"
+                type_name = "scalar"
+                details = f"{cur.dtype}"
                 if cur.size:
-                    desc += f" [value: {_fmt(cur.item())}]"
+                    details += f" [value: {_fmt(cur.item())}]"
+            # Handle ndarrays (1-dimensional or more)
             else:
-                desc = f"ndarray size{tuple(cur.shape)} {cur.dtype}"
+                type_name = "ndarray"
+                details = f"size{tuple(cur.shape)} {cur.dtype}"
                 if cur.size and np.issubdtype(cur.dtype, np.number):
-                    desc += (
+                    details += (
                         f" [min:{_fmt(cur.min())}, max:{_fmt(cur.max())}, avg:{_fmt(cur.mean())}]"
                     )
+
+            # Conditionally construct the final description string
+            if top and name:
+                # If it's the top-level variable, insert the name in the middle
+                desc = f"{type_name} '{name}' {details}"
+            else:
+                # Otherwise, use the standard format
+                desc = f"{type_name} {details}"
+                
             out.append(f"{indent}{desc}")
             return out
 
-        # ---------- scalars / strings / others ----------
+# ---------- scalars / strings / others ----------
+        type_name = ""
+        details = ""
+
         if isinstance(cur, (int, float, complex, np.generic)):
-            out.append(f"{indent}scalar {type(cur).__name__} [value: {_fmt(cur)}]")
+            type_name = "scalar"
+            details = f"{type(cur).__name__} [value: {_fmt(cur)}]"
         elif isinstance(cur, str):
-            out.append(f"{indent}str [length: {len(cur)}]")
+            type_name = "str"
+            details = f"[length: {len(cur)}]"
         else:
-            out.append(f"{indent}{type(cur).__name__}")
+            # For any other types, the name is the full description
+            type_name = f"{type(cur).__name__}"
+            details = ""
+
+        # Conditionally construct the final description string
+        if top and name:
+            # If it's the top-level variable, insert the name in the middle
+            # .strip() handles cases where details might be empty
+            desc = f"{type_name} '{name}' {details}".strip()
+        else:
+            # Otherwise, use the standard format
+            desc = f"{type_name} {details}".strip()
+            
+        out.append(f"{indent}{desc}")
         return out
 
     # Detect variable name for top-level object
@@ -130,5 +171,10 @@ def vardescribe(obj):
 
     lines = _lines(obj, 0, top=True, name=var_name)
     report = "\n".join(lines) + "\n"
-    subprocess.run("clip", universal_newlines=True, input=report)
+    # The original function included a copy-to-clipboard functionality
+    # which may not be desired in all environments. It can be uncommented if needed.
+    # try:
+    #     subprocess.run("clip", universal_newlines=True, input=report, check=True)
+    # except (FileNotFoundError, subprocess.CalledProcessError):
+    #     pass # Handle cases where 'clip' is not available or fails
     print(report, end="")

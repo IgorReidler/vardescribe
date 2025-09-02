@@ -9,8 +9,8 @@ Printed descriptions includes:
 * variable name
 * shape
 * dtype
-* summary statistics.
-* Pandas DataFrame adds column names
+* summary statistics
+* column names of pandas dataframes
 
 Clipboard Integration: Automatically copies the description to the clipboard for easy pasting into documents, notes, or chat applications (currently supports Windows).
 
@@ -42,6 +42,7 @@ import numpy as np
 import pandas as pd
 from vardescribe import vardescribe
 
+my_scalar = 2
 my_list = [1, 2, 3, 4, 5]
 my_numpy_array = np.array([[1, 2], [3, 4]])
 my_dict = {
@@ -59,27 +60,40 @@ student_data = {
 my_df = pd.DataFrame(student_data)
 
 #describe variables
+vardescribe(my_scalar)
+print('\n')
 vardescribe(my_list)
+print('\n')
 vardescribe(my_numpy_array)
+print('\n')
 vardescribe(my_dict)
+print('\n')
 vardescribe(my_df)
 ```
 ### Example output
 ```
-list size(5) [all int]
+scalar 'my_scalar' int [value: 2]
+
+
+list 'my_list' size(5) [all int]
         scalar int [value: 1]
-ndarray size(2, 2) int64 [min:1, max:4, avg:2.5]
-dict my_dict with 3 keys
+
+
+ndarray 'my_numpy_array' size(2, 2) int64 [min:1, max:4, avg:2.5]
+
+
+dict 'my_dict' with 3 keys
         'name'  str [length: 8]
         'age'   scalar int [value: 30]
         'is_student'    scalar bool [value: 0]
-dataframe my_df with 5 rows, 5 columns
+
+
+dataframe 'my_df' with 5 rows, 5 columns
         'student_id'    int64   [min:101, max:105, avg:103]
         'major'         object
         'gpa'           float64 [min:3.1, max:3.9, avg:3.5]
         'credits_earned'        int64   [min:55, max:110, avg:80]
-        'is_scholarship'        bool
-```
+        'is_scholarship'        bool```
         
 ## Author
 Igor Reidler
