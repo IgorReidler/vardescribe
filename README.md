@@ -1,22 +1,34 @@
 # vardescribe
 
-A simple Python utility to describe the structure, types, and summary statistics of a variable. The generated report is printed to the console and automatically copied to your clipboard.
-Intended usage includes sharing the variable description with an LLM or another person for easy collaboration.
-The function does not use or access an LLM to generate the description.
+Do you find yourself describing a complex dict or dataframe to an LLM for context?
+vardescribe is a simple Python function that prints out the structure, types, and summary statistics of a variable. The output can be easily shared with an LLM or another person for a complete, descriptive overview of that variable.<br />
+Example outputs for dict and Pandas dataframe:
+```
+dict 'my_dict' with 3 keys
+        'name'  str [length: 8]
+        'age'   scalar int [value: 30]
+        'is_student'    scalar bool [value: 0]
+```
+```
+dataframe 'my_df' with 5 rows, 5 columns
+        'student_id'    int64   [min:101, max:105, avg:103]
+        'major'         object
+        'gpa'           float64 [min:3.1, max:3.9, avg:3.5]
+        'credits_earned'        int64   [min:55, max:110, avg:80]
+        'is_scholarship'        bool
+```
 
 ## Details
-Printed descriptions includes:
+Printed fields include:
 * variable name
 * shape
 * dtype
 * summary statistics
 * column names of pandas dataframes
 
-Clipboard Integration: Automatically copies the description to the clipboard for easy pasting into documents, notes, or chat applications (currently supports Windows).
+Clipboard Integration (Windows only): automatically copies the description to the clipboard for easy pasting into documents, notes, or chat applications.
 
-Tested on:
-* Windows, VSCode
-* Simple variables, Pandas DataFrames, Numpy arrays
+Currently tested on Windows, Ubuntu
 
 ## Getting Started
 
@@ -33,8 +45,8 @@ Optional
 ```pip install pandas```
 
 ### Usage
-1. Import vardescribe: ```from vardescribe import vardescribe```
-2. Use it by passing a variable: ```vardescribe(variable_name)```
+1. Import: ```from vardescribe import vardescribe```
+2. Function call: ```vardescribe(your_variable_name)```
 
 ### Example
 ```
