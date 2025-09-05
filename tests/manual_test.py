@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from vardescribe import vardescribe
+from vardescribe.core import vardescribe
 
 my_scalar = 2
 my_list = [1, 2, 3, 4, 5]
@@ -20,7 +20,7 @@ student_data = {
 my_df = pd.DataFrame(student_data)
 
 #describe variables
-vardescribe(my_scalar)
+report = vardescribe(my_scalar)
 print('\n')
 vardescribe(my_list)
 print('\n')
@@ -28,4 +28,5 @@ vardescribe(my_numpy_array)
 print('\n')
 vardescribe(my_dict)
 print('\n')
-vardescribe(my_df)
+report = vardescribe(my_df)
+print(report)

@@ -2,6 +2,7 @@
 
 import inspect
 import numpy as np
+import subprocess
 
 
 def vardescribe(obj):
@@ -171,10 +172,11 @@ def vardescribe(obj):
 
     lines = _lines(obj, 0, top=True, name=var_name)
     report = "\n".join(lines) + "\n"
-    # The original function included a copy-to-clipboard functionality
-    # which may not be desired in all environments. It can be uncommented if needed.
-    # try:
-    #     subprocess.run("clip", universal_newlines=True, input=report, check=True)
-    # except (FileNotFoundError, subprocess.CalledProcessError):
-    #     pass # Handle cases where 'clip' is not available or fails
+
+    try:
+        subprocess.run("clip", universal_newlines=True, input=report, check=True)
+    except (FileNotFoundError, subprocess.CalledProcessError):
+        pass
+    
     print(report, end="")
+    return report
